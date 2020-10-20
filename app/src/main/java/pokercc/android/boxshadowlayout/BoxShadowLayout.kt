@@ -29,16 +29,17 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private val shadowColor = 0xffc7ccde.toInt()
     private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = 0xffc7ccde.toInt()
-        maskFilter = BlurMaskFilter(5f, BlurMaskFilter.Blur.INNER)
-        shader = LinearGradient(
-            0f,
-            0f,
-            300f,
-            0f,
-            shadowColor,
-            0xFFFF7D39.toInt(),
-            Shader.TileMode.MIRROR
-        )
+        maskFilter = BlurMaskFilter(25f, BlurMaskFilter.Blur.INNER)
+//        shader = LinearGradient(
+//            0f,
+//            0f,
+//            300f,
+//            0f,
+//            shadowColor,
+//            0xFFFF7D39.toInt(),
+//            Shader.TileMode.MIRROR
+//        )
+        setShadowLayer(40f, 0f, 28f, shadowColor)
         this.strokeWidth = shadowWidth
         this.style = Paint.Style.FILL
     }
