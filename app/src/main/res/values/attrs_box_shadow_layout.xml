@@ -1,0 +1,10 @@
+<resources>
+    <declare-styleable name="BoxShadowLayout">
+        <attr name="h_shadow" format="dimension" />
+        <attr name="v_shadow" format="dimension" />
+        <attr name="blur" format="dimension" />
+        <attr name="spread" format="dimension" />
+        <attr name="color" format="color|reference" />
+        <attr name="inset" format="boolean" />
+    </declare-styleable>
+</resources>
