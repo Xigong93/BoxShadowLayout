@@ -1,10 +1,7 @@
 package pokercc.android.boxshadowlayout
 
 import android.content.Context
-import android.graphics.BlurMaskFilter
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +25,14 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private var shadowBlur = 5f * 3
     private var shadowInset = false
     private var radius = 0f
+    private val shadowPaint = Paint().apply {
+        style = Paint.Style.FILL
+    }
+    private val clipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color=Color.WHITE
+        style = Paint.Style.FILL
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.DST)
+    }
 
     init {
         setWillNotDraw(false)
@@ -40,23 +45,18 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         context.obtainStyledAttributes(
             attrs, R.styleable.BoxShadowLayout, defStyle, 0
         ).apply {
-            setShadowVerticalOffset(getFloat(R.styleable.BoxShadowLayout_shadowVerticalOffset, 0f))
-            val hOffset = getFloat(R.styleable.BoxShadowLayout_shadowHorizontalOffset, 0f)
+            val vOffset = getDimension(R.styleable.BoxShadowLayout_shadowVerticalOffset, 0f)
+            setShadowVerticalOffset(vOffset)
+            val hOffset = getDimension(R.styleable.BoxShadowLayout_shadowHorizontalOffset, 0f)
             setShadowHorizontalOffset(hOffset)
             setShadowColor(getColor(R.styleable.BoxShadowLayout_shadowColor, 0xff888888.toInt()))
-            setShadowBlur(getFloat(R.styleable.BoxShadowLayout_shadowBlur, 0f))
+            setShadowBlur(getDimension(R.styleable.BoxShadowLayout_shadowBlur, 0f))
             setShadowInset(getBoolean(R.styleable.BoxShadowLayout_shadowInset, false))
-            setRadius(getFloat(R.styleable.BoxShadowLayout_radius, 0f))
+            setRadius(getDimension(R.styleable.BoxShadowLayout_radius, 0f))
         }.recycle()
 
     }
 
-
-    private val shadowPaint = Paint().apply {
-        color = shadowColor
-        style = Paint.Style.FILL
-        maskFilter = BlurMaskFilter(shadowBlur, BlurMaskFilter.Blur.OUTER)
-    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -76,6 +76,21 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     }
 
+    override fun draw(canvas: Canvas) {
+        if (radius > 0) {
+            canvas.drawRoundRect(
+                0f,
+                0f,
+                width.toFloat(),
+                height.toFloat(),
+                radius,
+                radius,
+                clipPaint
+            )
+        }
+        super.draw(canvas)
+    }
+
     private val target: View? get() = getChildAt(0)
     private fun drawShadow(canvas: Canvas) {
         target?.let {
@@ -90,6 +105,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             )
 
         }
+
     }
 
 
@@ -129,7 +145,8 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     private fun resetBlur() {
         val type = if (this.shadowInset) BlurMaskFilter.Blur.INNER else BlurMaskFilter.Blur.OUTER
-        shadowPaint.maskFilter = BlurMaskFilter(this.shadowBlur, type)
+        shadowPaint.maskFilter =
+            if (this.shadowBlur == 0f) null else BlurMaskFilter(this.shadowBlur, type)
     }
 
     fun isShadowInset(): Boolean = this.shadowInset

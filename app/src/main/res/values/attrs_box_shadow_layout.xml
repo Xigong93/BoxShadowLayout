@@ -6,6 +6,6 @@
         <attr name="shadowSpread" format="dimension" />
         <attr name="shadowColor" format="color|reference" />
         <attr name="shadowInset" format="boolean" />
-        <attr name="radius" format="float" />
+        <attr name="radius" format="dimension" />
     </declare-styleable>
 </resources>
