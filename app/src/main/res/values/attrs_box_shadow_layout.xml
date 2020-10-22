@@ -1,10 +1,11 @@
 <resources>
     <declare-styleable name="BoxShadowLayout">
-        <attr name="h_shadow" format="dimension" />
-        <attr name="v_shadow" format="dimension" />
-        <attr name="blur" format="dimension" />
-        <attr name="spread" format="dimension" />
-        <attr name="color" format="color|reference" />
-        <attr name="inset" format="boolean" />
+        <attr name="shadowVerticalOffset" format="dimension" />
+        <attr name="shadowHorizontalOffset" format="dimension" />
+        <attr name="shadowBlur" format="dimension" />
+        <attr name="shadowSpread" format="dimension" />
+        <attr name="shadowColor" format="color|reference" />
+        <attr name="shadowInset" format="boolean" />
+        <attr name="radius" format="float" />
     </declare-styleable>
 </resources>
