@@ -22,9 +22,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:shadowBlur="8dp"
         app:shadowColor="#f00"
-        app:shadowHorizontalOffset="5dp"
         app:shadowInset="false"
-        app:shadowVerticalOffset="5dp">
+        app:shadowOffsetHorizontal="5dp"
+        app:shadowOffsetVertical="5dp">
 
         <ImageView
             android:layout_width="match_parent"

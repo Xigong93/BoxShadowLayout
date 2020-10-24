@@ -53,9 +53,9 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         context.obtainStyledAttributes(
             attrs, R.styleable.BoxShadowLayout, defStyle, 0
         ).apply {
-            val vOffset = getDimension(R.styleable.BoxShadowLayout_shadowVerticalOffset, 0f)
+            val vOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetVertical, 0f)
             setShadowVerticalOffset(vOffset)
-            val hOffset = getDimension(R.styleable.BoxShadowLayout_shadowHorizontalOffset, 0f)
+            val hOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetHorizontal, 0f)
             setShadowHorizontalOffset(hOffset)
             setShadowColor(getColor(R.styleable.BoxShadowLayout_shadowColor, 0xff888888.toInt()))
             setShadowBlur(getDimension(R.styleable.BoxShadowLayout_shadowBlur, 0f))
