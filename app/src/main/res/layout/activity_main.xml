@@ -15,12 +15,12 @@
         android:layout_gravity="center"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
+        app:bottomLeftBoxRadius="8dp"
+        app:bottomRightBoxRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:bottomLeftRadius="8dp"
         app:shadowBlur="8dp"
         app:shadowColor="#f00"
-        app:bottomRightRadius="8dp"
         app:shadowInset="false">
 
         <ImageView

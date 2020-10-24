@@ -3,7 +3,6 @@ package pokercc.android.boxshadowlayout
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
@@ -26,11 +25,11 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private var shadowBlur = 0f
     private var shadowInset = false
     private var shadowSpread = 0f
-    private var radius = 0f
-    private var topLeftRadius = 0f
-    private var topRightRadius = 0f
-    private var bottomLeftRadius = 0f
-    private var bottomRightRadius = 0f
+    private var boxRadius = 0f
+    private var topLeftBoxRadius = 0f
+    private var topRightBoxRadius = 0f
+    private var bottomLeftBoxRadius = 0f
+    private var bottomRightBoxRadius = 0f
     private val clipPath = Path()
     private val clipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
@@ -60,18 +59,22 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             setShadowBlur(getDimension(R.styleable.BoxShadowLayout_shadowBlur, 0f))
             setShadowInset(getBoolean(R.styleable.BoxShadowLayout_shadowInset, false))
             setShadowSpread(getDimension(R.styleable.BoxShadowLayout_shadowSpread, 0f))
-            val radius = getDimension(R.styleable.BoxShadowLayout_radius, 0f)
-            setRadius(radius)
-            if (hasValue(R.styleable.BoxShadowLayout_topLeftRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_topRightRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_bottomLeftRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_bottomRightRadius)
-            ) setRadius(
-                getDimension(R.styleable.BoxShadowLayout_topLeftRadius, radius),
-                getDimension(R.styleable.BoxShadowLayout_topRightRadius, radius),
-                getDimension(R.styleable.BoxShadowLayout_bottomLeftRadius, radius),
-                getDimension(R.styleable.BoxShadowLayout_bottomRightRadius, radius)
-            )
+            boxRadius = getDimension(R.styleable.BoxShadowLayout_boxRadius, 0f)
+            if (hasValue(R.styleable.BoxShadowLayout_topLeftBoxRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_topRightBoxRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_bottomLeftBoxRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_bottomRightBoxRadius)
+            ) {
+                setBoxRadius(
+                    getDimension(R.styleable.BoxShadowLayout_topLeftBoxRadius, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_topRightBoxRadius, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_bottomLeftBoxRadius, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_bottomRightBoxRadius, boxRadius)
+                )
+            } else {
+                setBoxRadius(boxRadius)
+            }
+
 
         }.recycle()
 
@@ -96,16 +99,18 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        setRadius(
-            this.topLeftRadius,
-            this.topRightRadius,
-            this.bottomLeftRadius,
-            this.bottomRightRadius
+        setBoxRadius(
+            this.topLeftBoxRadius,
+            this.topRightBoxRadius,
+            this.bottomLeftBoxRadius,
+            this.bottomRightBoxRadius
         )
     }
 
     private fun clipRadius(canvas: Canvas) {
-        if (radius > 0) {
+        if (boxRadius > 0
+            || topLeftBoxRadius + topRightBoxRadius + bottomLeftBoxRadius + bottomRightBoxRadius > 0
+        ) {
             canvas.drawPath(clipPath, clipPaint)
         }
     }
@@ -167,26 +172,26 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun getShadowSpread() = shadowSpread
 
-    fun setRadius(radius: Float) {
-        this.radius = radius.absoluteValue
-        setRadius(this.radius, this.radius, this.radius, this.radius)
+    fun setBoxRadius(radius: Float) {
+        this.boxRadius = radius.absoluteValue
+        setBoxRadius(this.boxRadius, this.boxRadius, this.boxRadius, this.boxRadius)
     }
 
 
-    fun getRadius(): Float = this.radius
+    fun getRadius(): Float = this.boxRadius
 
-    fun setRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
-        this.topLeftRadius = topLeft.absoluteValue
-        this.topRightRadius = topRight.absoluteValue
-        this.bottomLeftRadius = bottomLeft.absoluteValue
-        this.bottomRightRadius = bottomRight.absoluteValue
+    fun setBoxRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+        this.topLeftBoxRadius = topLeft.absoluteValue
+        this.topRightBoxRadius = topRight.absoluteValue
+        this.bottomLeftBoxRadius = bottomLeft.absoluteValue
+        this.bottomRightBoxRadius = bottomRight.absoluteValue
         clipPath.reset()
         clipPath.fillType = Path.FillType.INVERSE_WINDING
         clipPath.setRoundRect(
-            this.topLeftRadius,
-            this.topRightRadius,
-            this.bottomLeftRadius,
-            this.bottomRightRadius,
+            this.topLeftBoxRadius,
+            this.topRightBoxRadius,
+            this.bottomLeftBoxRadius,
+            this.bottomRightBoxRadius,
             width.toFloat(),
             height.toFloat()
         )
@@ -194,10 +199,10 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         resetShadowOffset()
         shadowPath.fillType = Path.FillType.WINDING
         shadowPath.setRoundRect(
-            this.topLeftRadius,
-            this.topRightRadius,
-            this.bottomLeftRadius,
-            this.bottomRightRadius,
+            this.topLeftBoxRadius,
+            this.topRightBoxRadius,
+            this.bottomLeftBoxRadius,
+            this.bottomRightBoxRadius,
             width.toFloat() + shadowSpread * 2,
             height.toFloat() + shadowSpread * 2
         )
@@ -212,10 +217,10 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     }
 
-    fun getTopLeftRadius() = topLeftRadius
-    fun getTopRightRadius() = topRightRadius
-    fun getBottomRightRadius() = bottomRightRadius
-    fun getBottomLeftRadius() = bottomLeftRadius
+    fun getTopLeftRadius() = topLeftBoxRadius
+    fun getTopRightRadius() = topRightBoxRadius
+    fun getBottomRightRadius() = bottomRightBoxRadius
+    fun getBottomLeftRadius() = bottomLeftBoxRadius
 
 
 }
