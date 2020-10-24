@@ -9,9 +9,9 @@
         <attr name="shadowInset" format="boolean" />
         <!-- extended attributes-->
         <attr name="boxRadius" format="dimension" />
-        <attr name="topLeftBoxRadius" format="dimension" />
-        <attr name="topRightBoxRadius" format="dimension" />
-        <attr name="bottomLeftBoxRadius" format="dimension" />
-        <attr name="bottomRightBoxRadius" format="dimension" />
+        <attr name="boxRadiusTopLeft" format="dimension" />
+        <attr name="boxRadiusTopRight" format="dimension" />
+        <attr name="boxRadiusBottomLeft" format="dimension" />
+        <attr name="boxRadiusBottomRight" format="dimension" />
     </declare-styleable>
 </resources>

@@ -1,2 +1,3 @@
+include ':boxShadowLayout'
 include ':app'
-rootProject.name = "BoxShadowLayout"
+rootProject.name = "BoxShadow"

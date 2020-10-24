@@ -10,6 +10,8 @@ import kotlin.math.absoluteValue
 
 /**
  * Box Shadow like css in web.
+ * @author pokercc
+ * @date 2020-10-20 00:10:19
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
@@ -60,16 +62,16 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             setShadowInset(getBoolean(R.styleable.BoxShadowLayout_shadowInset, false))
             setShadowSpread(getDimension(R.styleable.BoxShadowLayout_shadowSpread, 0f))
             boxRadius = getDimension(R.styleable.BoxShadowLayout_boxRadius, 0f)
-            if (hasValue(R.styleable.BoxShadowLayout_topLeftBoxRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_topRightBoxRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_bottomLeftBoxRadius) ||
-                hasValue(R.styleable.BoxShadowLayout_bottomRightBoxRadius)
+            if (hasValue(R.styleable.BoxShadowLayout_boxRadiusTopLeft) ||
+                hasValue(R.styleable.BoxShadowLayout_boxRadiusTopRight) ||
+                hasValue(R.styleable.BoxShadowLayout_boxRadiusBottomLeft) ||
+                hasValue(R.styleable.BoxShadowLayout_boxRadiusBottomRight)
             ) {
                 setBoxRadius(
-                    getDimension(R.styleable.BoxShadowLayout_topLeftBoxRadius, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_topRightBoxRadius, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_bottomLeftBoxRadius, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_bottomRightBoxRadius, boxRadius)
+                    getDimension(R.styleable.BoxShadowLayout_boxRadiusTopLeft, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_boxRadiusTopRight, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_boxRadiusBottomLeft, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_boxRadiusBottomRight, boxRadius)
                 )
             } else {
                 setBoxRadius(boxRadius)
