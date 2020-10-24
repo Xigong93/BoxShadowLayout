@@ -25,14 +25,14 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private var shadowBlur = 5f * 3
     private var shadowInset = false
     private var radius = 0f
+    private val radiusPath = Path()
     private val shadowPaint = Paint().apply {
         style = Paint.Style.FILL
     }
     private val clipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color=Color.WHITE
-        style = Paint.Style.FILL
-        xfermode = PorterDuffXfermode(PorterDuff.Mode.DST)
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     }
+
 
     init {
         setWillNotDraw(false)
@@ -70,28 +70,25 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         require(childCount == 1) { "BoxShadowLayout only support one children!" }
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+
+    override fun draw(canvas: Canvas) {
         drawShadow(canvas)
+        val saveCount = canvas.saveLayer(null, null)
+        super.draw(canvas)
+        clipRadius(canvas)
+        canvas.restoreToCount(saveCount)
 
     }
 
-    override fun draw(canvas: Canvas) {
+
+    private fun clipRadius(canvas: Canvas) {
         if (radius > 0) {
-            canvas.drawRoundRect(
-                0f,
-                0f,
-                width.toFloat(),
-                height.toFloat(),
-                radius,
-                radius,
-                clipPaint
-            )
+            canvas.drawPath(radiusPath, clipPaint)
         }
-        super.draw(canvas)
     }
 
     private val target: View? get() = getChildAt(0)
+
     private fun drawShadow(canvas: Canvas) {
         target?.let {
             canvas.drawRoundRect(
@@ -153,8 +150,27 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setRadius(radius: Float) {
         this.radius = radius
+        radiusPath.reset()
+        radiusPath.addRoundRect(
+            RectF(0f, 0f, width.toFloat(), height.toFloat()),
+            this.radius,
+            this.radius,
+            Path.Direction.CW
+        )
         invalidate()
     }
 
     fun getRadius(): Float = this.radius
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        radiusPath.reset()
+        radiusPath.fillType = Path.FillType.INVERSE_WINDING
+        radiusPath.addRoundRect(
+            RectF(0f, 0f, w.toFloat(), h.toFloat()),
+            this.radius,
+            this.radius,
+            Path.Direction.CW
+        )
+    }
 }
