@@ -17,16 +17,18 @@
         android:layout_marginEnd="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:radius="8dp"
+        app:bottomLeftRadius="8dp"
         app:shadowBlur="8dp"
         app:shadowColor="#f00"
+        app:bottomRightRadius="8dp"
         app:shadowInset="false">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/gaoyuanyuan" />
+            android:src="@drawable/gaoyuanyuan"
+            tools:ignore="ContentDescription" />
     </pokercc.android.boxshadowlayout.BoxShadowLayout>
 
 </FrameLayout>

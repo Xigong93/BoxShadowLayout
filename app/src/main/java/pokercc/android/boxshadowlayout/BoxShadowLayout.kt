@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
+import kotlin.math.absoluteValue
 
 /**
  * Box Shadow like css in web.
@@ -22,15 +23,21 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private var shadowVerticalOffset = 0f
     private var shadowHorizontalOffset = 0f
     private var shadowColor = Color.RED
-    private var shadowBlur = 5f * 3
+    private var shadowBlur = 0f
     private var shadowInset = false
+    private var shadowSpread = 0f
     private var radius = 0f
-    private val radiusPath = Path()
-    private val shadowPaint = Paint().apply {
-        style = Paint.Style.FILL
-    }
+    private var topLeftRadius = 0f
+    private var topRightRadius = 0f
+    private var bottomLeftRadius = 0f
+    private var bottomRightRadius = 0f
+    private val clipPath = Path()
     private val clipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+    }
+    private val shadowPath = Path()
+    private val shadowPaint = Paint().apply {
+        style = Paint.Style.FILL
     }
 
 
@@ -52,7 +59,20 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             setShadowColor(getColor(R.styleable.BoxShadowLayout_shadowColor, 0xff888888.toInt()))
             setShadowBlur(getDimension(R.styleable.BoxShadowLayout_shadowBlur, 0f))
             setShadowInset(getBoolean(R.styleable.BoxShadowLayout_shadowInset, false))
-            setRadius(getDimension(R.styleable.BoxShadowLayout_radius, 0f))
+            setShadowSpread(getDimension(R.styleable.BoxShadowLayout_shadowSpread, 0f))
+            val radius = getDimension(R.styleable.BoxShadowLayout_radius, 0f)
+            setRadius(radius)
+            if (hasValue(R.styleable.BoxShadowLayout_topLeftRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_topRightRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_bottomLeftRadius) ||
+                hasValue(R.styleable.BoxShadowLayout_bottomRightRadius)
+            ) setRadius(
+                getDimension(R.styleable.BoxShadowLayout_topLeftRadius, radius),
+                getDimension(R.styleable.BoxShadowLayout_topRightRadius, radius),
+                getDimension(R.styleable.BoxShadowLayout_bottomLeftRadius, radius),
+                getDimension(R.styleable.BoxShadowLayout_bottomRightRadius, radius)
+            )
+
         }.recycle()
 
     }
@@ -65,12 +85,6 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 //        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
-    override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
-        super.addView(child, index, params)
-        require(childCount == 1) { "BoxShadowLayout only support one children!" }
-    }
-
-
     override fun draw(canvas: Canvas) {
         drawShadow(canvas)
         val saveCount = canvas.saveLayer(null, null)
@@ -80,34 +94,31 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        setRadius(
+            this.topLeftRadius,
+            this.topRightRadius,
+            this.bottomLeftRadius,
+            this.bottomRightRadius
+        )
+    }
 
     private fun clipRadius(canvas: Canvas) {
         if (radius > 0) {
-            canvas.drawPath(radiusPath, clipPaint)
+            canvas.drawPath(clipPath, clipPaint)
         }
     }
 
-    private val target: View? get() = getChildAt(0)
 
     private fun drawShadow(canvas: Canvas) {
-        target?.let {
-            canvas.drawRoundRect(
-                it.x + shadowHorizontalOffset,
-                it.y + shadowVerticalOffset,
-                it.x + it.width.toFloat() + shadowHorizontalOffset,
-                it.y + it.height.toFloat() + shadowVerticalOffset,
-                radius,
-                radius,
-                shadowPaint
-            )
-
-        }
-
+        canvas.drawPath(shadowPath, shadowPaint)
     }
 
 
     fun setShadowVerticalOffset(shadowVerticalOffset: Float) {
         this.shadowVerticalOffset = shadowVerticalOffset
+        resetShadowOffset()
         invalidate()
     }
 
@@ -115,6 +126,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setShadowHorizontalOffset(shadowHorizontalOffset: Float) {
         this.shadowHorizontalOffset = shadowHorizontalOffset
+        resetShadowOffset()
         invalidate()
     }
 
@@ -148,29 +160,135 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun isShadowInset(): Boolean = this.shadowInset
 
+    fun setShadowSpread(shadowSpread: Float) {
+        this.shadowSpread = shadowSpread
+        invalidate()
+    }
+
+    fun getShadowSpread() = shadowSpread
+
     fun setRadius(radius: Float) {
-        this.radius = radius
-        radiusPath.reset()
-        radiusPath.addRoundRect(
-            RectF(0f, 0f, width.toFloat(), height.toFloat()),
-            this.radius,
-            this.radius,
-            Path.Direction.CW
+        this.radius = radius.absoluteValue
+        setRadius(this.radius, this.radius, this.radius, this.radius)
+    }
+
+
+    fun getRadius(): Float = this.radius
+
+    fun setRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+        this.topLeftRadius = topLeft.absoluteValue
+        this.topRightRadius = topRight.absoluteValue
+        this.bottomLeftRadius = bottomLeft.absoluteValue
+        this.bottomRightRadius = bottomRight.absoluteValue
+        clipPath.reset()
+        clipPath.fillType = Path.FillType.INVERSE_WINDING
+        clipPath.setRoundRect(
+            this.topLeftRadius,
+            this.topRightRadius,
+            this.bottomLeftRadius,
+            this.bottomRightRadius,
+            width.toFloat(),
+            height.toFloat()
+        )
+        shadowPath.reset()
+        resetShadowOffset()
+        shadowPath.fillType = Path.FillType.WINDING
+        shadowPath.setRoundRect(
+            this.topLeftRadius,
+            this.topRightRadius,
+            this.bottomLeftRadius,
+            this.bottomRightRadius,
+            width.toFloat() + shadowSpread * 2,
+            height.toFloat() + shadowSpread * 2
         )
         invalidate()
     }
 
-    fun getRadius(): Float = this.radius
+    private fun resetShadowOffset() {
+        shadowPath.offset(
+            -shadowSpread + shadowHorizontalOffset,
+            -shadowSpread + shadowVerticalOffset
+        )
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        radiusPath.reset()
-        radiusPath.fillType = Path.FillType.INVERSE_WINDING
-        radiusPath.addRoundRect(
-            RectF(0f, 0f, w.toFloat(), h.toFloat()),
-            this.radius,
-            this.radius,
+    }
+
+    fun getTopLeftRadius() = topLeftRadius
+    fun getTopRightRadius() = topRightRadius
+    fun getBottomRightRadius() = bottomRightRadius
+    fun getBottomLeftRadius() = bottomLeftRadius
+
+
+}
+
+private fun Path.setRoundRect(
+    topLeft: Float,
+    topRight: Float,
+    bottomLeft: Float,
+    bottomRight: Float,
+    width: Float,
+    height: Float
+) {
+    // same radius
+    if (topLeft == topRight && bottomLeft == bottomRight && topLeft == bottomLeft) {
+        addRoundRect(
+            0f,
+            0f,
+            width,
+            height,
+            topLeft,
+            topLeft,
             Path.Direction.CW
         )
+        return
     }
+    // difference radius
+    moveTo(0f, topLeft)
+    if (topLeft > 0) {
+        arcTo(
+            0f,
+            0f,
+            topLeft * 2,
+            topLeft * 2,
+            180f,
+            90f,
+            false
+        )
+    }
+    lineTo(width - topRight, 0f)
+    if (topRight > 0) {
+        arcTo(
+            width - topRight * 2,
+            0f,
+            width,
+            topRight * 2,
+            270f,
+            90f,
+            false
+        )
+    }
+    lineTo(width, height - bottomRight)
+    if (bottomRight > 0) {
+        arcTo(
+            width - bottomRight * 2,
+            height - bottomRight * 2,
+            width,
+            height,
+            0f,
+            90f,
+            false
+        )
+    }
+    lineTo(bottomLeft, height)
+    if (bottomLeft > 0) {
+        arcTo(
+            0f,
+            height - bottomLeft * 2,
+            bottomLeft * 2,
+            height,
+            90f,
+            90f,
+            false
+        )
+    }
+    close()
 }
