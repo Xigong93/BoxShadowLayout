@@ -160,7 +160,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     }
 
     private fun resetBlur() {
-        val type = if (this.shadowInset) BlurMaskFilter.Blur.INNER else BlurMaskFilter.Blur.OUTER
+        val type = if (this.shadowInset) BlurMaskFilter.Blur.INNER else BlurMaskFilter.Blur.NORMAL
         shadowPaint.maskFilter =
             if (this.shadowBlur == 0f) null else BlurMaskFilter(this.shadowBlur, type)
     }
@@ -198,7 +198,6 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             height.toFloat()
         )
         shadowPath.reset()
-        resetShadowOffset()
         shadowPath.fillType = Path.FillType.WINDING
         shadowPath.setRoundRect(
             this.topLeftBoxRadius,
@@ -208,6 +207,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             width.toFloat() + shadowSpread * 2,
             height.toFloat() + shadowSpread * 2
         )
+        resetShadowOffset()
         invalidate()
     }
 
