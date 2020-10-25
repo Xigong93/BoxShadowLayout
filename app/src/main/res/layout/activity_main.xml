@@ -11,7 +11,7 @@
 
     <pokercc.android.boxshadowlayout.BoxShadowLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
-            android:src="@drawable/gaoyuanyuan"
+            android:src="@drawable/unsplash_01"
             tools:ignore="ContentDescription" />
     </pokercc.android.boxshadowlayout.BoxShadowLayout>
 
