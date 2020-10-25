@@ -3,7 +3,7 @@
 
 ## Shadow Properties
 xml 属性|方法|对应的css中box-shadow属性|描述
---|--|--|--|--
+--|--|--|--
 shadowOffsetVertical | setShadowVerticalOffset() | h-shadow |水平阴影的位置。允许负值
 shadowOffsetHorizontal | setShadowHorizontalOffset() | v-shadow|垂直阴影的位置。允许负值
 shadowBlur | setShadowBlur() | blur | 模糊距离

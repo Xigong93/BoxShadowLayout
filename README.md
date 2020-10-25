@@ -1,9 +1,9 @@
-# BoxShadowLayout
+# BoxShadowLayout [中文](./README_ZN.md)
 BoxShadowLayout like box-shadow in web and enable set radius like cardView in android. Shadow outside of View bounds.
 
 ## Shadow Properties
 attr|method|css properties|desc
---|--|--|--|--
+--|--|--|--
 shadowOffsetVertical | setShadowVerticalOffset() | h-shadow | Required. The horizontal offset of the shadow. A positive value puts the shadow on the right side of the box, a negative value puts the shadow on the left side of the box|
 shadowOffsetHorizontal | setShadowHorizontalOffset() | v-shadow|Required. The vertical offset of the shadow. A positive value puts the shadow below the box, a negative value puts the shadow above the box|
 shadowBlur | setShadowBlur() | blur | Optional. The blur radius. The higher the number, the more blurred the shadow will be
