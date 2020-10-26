@@ -2,6 +2,7 @@ package pokercc.android.boxshadowlayout
 
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -37,9 +38,13 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     }
     private val shadowPath = Path()
-    private val shadowPaint = Paint().apply {
-        style = Paint.Style.FILL
-    }
+
+    private val shadowDrawable: ShadowDrawable =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            BlurMaskShadowDrawable(shadowPath)
+        } else {
+            RenderScriptShadowDrawable(context, shadowPath)
+        }
 
 
     init {
@@ -101,6 +106,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        shadowDrawable.setBounds(0, 0, w, h)
         setBoxRadius(
             this.topLeftBoxRadius,
             this.topRightBoxRadius,
@@ -111,7 +117,10 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     private fun clipRadius(canvas: Canvas) {
         if (boxRadius > 0
-            || topLeftBoxRadius + topRightBoxRadius + bottomLeftBoxRadius + bottomRightBoxRadius > 0
+            || topLeftBoxRadius > 0
+            || topRightBoxRadius > 0
+            || bottomLeftBoxRadius > 0
+            || bottomRightBoxRadius > 0
         ) {
             canvas.drawPath(clipPath, clipPaint)
         }
@@ -119,7 +128,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
 
     private fun drawShadow(canvas: Canvas) {
-        canvas.drawPath(shadowPath, shadowPaint)
+        shadowDrawable.draw(canvas)
     }
 
 
@@ -141,7 +150,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setShadowColor(@ColorInt shadowColor: Int) {
         this.shadowColor = shadowColor
-        shadowPaint.color = this.shadowColor
+        shadowDrawable.shadowColor = shadowColor
         invalidate()
     }
 
@@ -149,21 +158,16 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setShadowBlur(shadowBlur: Float) {
         this.shadowBlur = shadowBlur
-        resetBlur()
+        shadowDrawable.shadowBlur = shadowBlur
         invalidate()
     }
 
     fun setShadowInset(shadowInset: Boolean) {
         this.shadowInset = shadowInset
-        resetBlur()
+        shadowDrawable.shadowInset = shadowInset
         invalidate()
     }
 
-    private fun resetBlur() {
-        val type = if (this.shadowInset) BlurMaskFilter.Blur.INNER else BlurMaskFilter.Blur.NORMAL
-        shadowPaint.maskFilter =
-            if (this.shadowBlur == 0f) null else BlurMaskFilter(this.shadowBlur, type)
-    }
 
     fun isShadowInset(): Boolean = this.shadowInset
 
