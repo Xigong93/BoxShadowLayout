@@ -2,10 +2,13 @@ package pokercc.android.boxshadowlayout
 
 import android.content.Context
 import android.graphics.*
+import android.os.Trace
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+
+private const val LOG_TAG = "RenderScriptShadowDrawable"
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :
     ShadowDrawable(shadowPath) {
@@ -22,12 +25,14 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         }
 
     override fun draw(canvas: Canvas) {
+        Trace.beginSection("${LOG_TAG}:draw")
         val rawBitmap = rawBitmap ?: return
         val blurBitmap = blurBitmap ?: return
         val bitmapCanvas = Canvas(rawBitmap)
         bitmapCanvas.drawPath(shadowPath, shadowPaint)
         blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
         canvas.drawBitmap(blurBitmap, bounds.left.toFloat(), bounds.top.toFloat(), null)
+        Trace.endSection()
     }
 
     private var rawBitmap: Bitmap? = null
@@ -51,6 +56,7 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
 }
 
 internal fun blurBitmap(context: Context, originBitmap: Bitmap, blurBitmap: Bitmap, radius: Float) {
+    Trace.beginSection("${LOG_TAG}:blur")
     val renderScript = RenderScript.create(context)
     val allocation = Allocation.createFromBitmap(
         renderScript, originBitmap,
@@ -63,4 +69,6 @@ internal fun blurBitmap(context: Context, originBitmap: Bitmap, blurBitmap: Bitm
     script.setInput(allocation)
     script.forEach(output)
     output.copyTo(blurBitmap)
+    renderScript.destroy()
+    Trace.endSection()
 }
