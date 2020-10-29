@@ -3,12 +3,13 @@ package pokercc.android.boxshadowlayout
 import android.content.Context
 import android.graphics.*
 import android.os.Trace
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
+import android.util.Log
+import androidx.renderscript.Allocation
+import androidx.renderscript.Element
+import androidx.renderscript.RenderScript
+import androidx.renderscript.ScriptIntrinsicBlur
 
-private const val LOG_TAG = "RenderScriptShadowDrawable"
+private const val LOG_TAG = "RenderScriptShadow"
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :
     ShadowDrawable(shadowPath) {
@@ -30,14 +31,14 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         val blurBitmap = blurBitmap ?: return
         val bitmapCanvas = Canvas(rawBitmap)
         bitmapCanvas.drawPath(shadowPath, shadowPaint)
-        blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
+//        blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
+        fastBlur(context, rawBitmap, blurBitmap, shadowBlur)
         canvas.drawBitmap(blurBitmap, bounds.left.toFloat(), bounds.top.toFloat(), null)
         Trace.endSection()
     }
 
     private var rawBitmap: Bitmap? = null
     private var blurBitmap: Bitmap? = null
-
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
         rawBitmap?.recycle()
@@ -48,15 +49,20 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
 
     private fun createBitmap(bounds: Rect): Bitmap {
         return Bitmap.createBitmap(
-            (bounds.width() + shadowBlur * 2).toInt(),
-            (bounds.height() + shadowBlur * 2).toInt(),
+            ((bounds.width() + shadowBlur * 2)).toInt(),
+            ((bounds.height() + shadowBlur * 2)).toInt(),
             Bitmap.Config.ARGB_8888
         )
     }
 }
 
 internal fun blurBitmap(context: Context, originBitmap: Bitmap, blurBitmap: Bitmap, radius: Float) {
-    Trace.beginSection("${LOG_TAG}:blur")
+    val startTime = System.currentTimeMillis()
+    Log.d(
+        LOG_TAG,
+        "blurBitmap,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
+    )
+    Trace.beginSection("${LOG_TAG}:blurBitmap")
     val renderScript = RenderScript.create(context)
     val allocation = Allocation.createFromBitmap(
         renderScript, originBitmap,
@@ -71,4 +77,17 @@ internal fun blurBitmap(context: Context, originBitmap: Bitmap, blurBitmap: Bitm
     output.copyTo(blurBitmap)
     renderScript.destroy()
     Trace.endSection()
+    Log.d(LOG_TAG, "blurBitmap,passed ${System.currentTimeMillis() - startTime}ms")
+}
+
+internal fun fastBlur(context: Context, originBitmap: Bitmap, blurBitmap: Bitmap, radius: Float) {
+    val startTime = System.currentTimeMillis()
+    Log.d(
+        LOG_TAG,
+        "fastBlur,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
+    )
+    Trace.beginSection("${LOG_TAG}:fastBlur")
+    FastBlur.fastBlur(originBitmap, blurBitmap, radius.toInt())
+    Trace.endSection()
+    Log.d(LOG_TAG, "fastBlur,passed ${System.currentTimeMillis() - startTime}ms")
 }

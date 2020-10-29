@@ -39,12 +39,13 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     }
     private val shadowPath = Path()
 
-    private val shadowDrawable: ShadowDrawable =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            BlurMaskShadowDrawable(shadowPath)
-        } else {
-            RenderScriptShadowDrawable(context, shadowPath)
-        }
+    private val shadowDrawable: ShadowDrawable =RenderScriptShadowDrawable(context, shadowPath)
+//    private val shadowDrawable: ShadowDrawable =
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            BlurMaskShadowDrawable(shadowPath)
+//        } else {
+//            RenderScriptShadowDrawable(context, shadowPath)
+//        }
 
 
     init {
@@ -101,7 +102,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         super.draw(canvas)
         clipRadius(canvas)
         canvas.restoreToCount(saveCount)
-
+        invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
