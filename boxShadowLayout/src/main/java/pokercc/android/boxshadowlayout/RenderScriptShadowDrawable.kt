@@ -4,12 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Paint
 import android.graphics.Path
-import android.os.Trace
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import android.util.Log
 
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :
@@ -38,12 +36,7 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         blurBitmap: Bitmap,
         radius: Float
     ) {
-        val startTime = System.currentTimeMillis()
-        Log.d(
-            LOG_TAG,
-            "blurBitmap,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
-        )
-        Trace.beginSection("${LOG_TAG}:blurBitmap")
+
         val renderScript = RenderScript.create(context, RenderScript.ContextType.PROFILE)
         val allocation = Allocation.createFromBitmap(
             renderScript, originBitmap,
@@ -57,8 +50,6 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         script.forEach(output)
         output.copyTo(blurBitmap)
         renderScript.destroy()
-        Trace.endSection()
-        Log.d(LOG_TAG, "blurBitmap,passed ${System.currentTimeMillis() - startTime}ms")
     }
 
 

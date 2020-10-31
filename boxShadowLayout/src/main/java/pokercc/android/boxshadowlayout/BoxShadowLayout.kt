@@ -2,6 +2,8 @@ package pokercc.android.boxshadowlayout
 
 import android.content.Context
 import android.graphics.*
+import android.os.Build
+import android.os.Trace
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -21,8 +23,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         private const val DEBUG = false
     }
 
-    private var shadowVerticalOffset = 0f
-    private var shadowHorizontalOffset = 0f
+    private val clipPath = Path()
     private var shadowColor = Color.RED
     private var shadowBlur = 0f
     private var shadowInset = false
@@ -32,21 +33,21 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     private var topRightBoxRadius = 0f
     private var bottomLeftBoxRadius = 0f
     private var bottomRightBoxRadius = 0f
-    private val clipPath = Path()
-    private val clipPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private var shadowVerticalOffset = 0f
+    private var shadowHorizontalOffset = 0f
+    private val clipPaint = Paint().apply {
+        isDither = true
+        isAntiAlias = true
         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
     }
     private val shadowPath = Path()
 
-    private val shadowDrawable: ShadowDrawable = BlurMaskBitmapShadowDrawable(shadowPath)
-//    private val shadowDrawable: ShadowDrawable = BlurMaskShadowDrawable(shadowPath)
-//    private val shadowDrawable: ShadowDrawable =RenderScriptShadowDrawable(context, shadowPath)
-//    private val shadowDrawable: ShadowDrawable =
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            BlurMaskShadowDrawable(shadowPath)
-//        } else {
-//            RenderScriptShadowDrawable(context, shadowPath)
-//        }
+    private val shadowDrawable: ShadowDrawable =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            BlurMaskShadowDrawable(shadowPath)
+        } else {
+            BlurMaskBitmapShadowDrawable(shadowPath)
+        }
 
 
     init {
@@ -94,16 +95,17 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         super.onAttachedToWindow()
         // Tell parent don't clip me. Otherwise the shadow will be erase.
         (parent as? ViewGroup)?.clipChildren = false
-//        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     override fun draw(canvas: Canvas) {
         drawShadow(canvas)
         val saveCount = canvas.saveLayer(null, null)
-        super.draw(canvas)
-        clipRadius(canvas)
-        canvas.restoreToCount(saveCount)
-        invalidate()
+        try {
+            super.draw(canvas)
+            clipRadius(canvas)
+        } finally {
+            canvas.restoreToCount(saveCount)
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -124,13 +126,23 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
             || bottomLeftBoxRadius > 0
             || bottomRightBoxRadius > 0
         ) {
-            canvas.drawPath(clipPath, clipPaint)
+            Trace.beginSection("${LOG_TAG}.clipRadius")
+            try {
+                canvas.drawPath(clipPath, clipPaint)
+            } finally {
+                Trace.endSection()
+            }
         }
     }
 
 
     private fun drawShadow(canvas: Canvas) {
-        shadowDrawable.draw(canvas)
+        Trace.beginSection("${LOG_TAG}.drawShadow")
+        try {
+            shadowDrawable.draw(canvas)
+        } finally {
+            Trace.endSection()
+        }
     }
 
 
@@ -195,7 +207,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         this.bottomRightBoxRadius = bottomRight.absoluteValue
         clipPath.reset()
         clipPath.fillType = Path.FillType.INVERSE_WINDING
-        clipPath.addRoundRect(
+        clipPath.addRoundRect2(
             this.topLeftBoxRadius,
             this.topRightBoxRadius,
             this.bottomLeftBoxRadius,
@@ -205,7 +217,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         )
         shadowPath.reset()
         shadowPath.fillType = Path.FillType.WINDING
-        shadowPath.addRoundRect(
+        shadowPath.addRoundRect2(
             this.topLeftBoxRadius,
             this.topRightBoxRadius,
             this.bottomLeftBoxRadius,
@@ -233,75 +245,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
 }
 
-private fun Path.addRoundRect(
-    topLeft: Float,
-    topRight: Float,
-    bottomLeft: Float,
-    bottomRight: Float,
-    width: Float,
-    height: Float
-) {
-    // same radius
-    if (topLeft == topRight && bottomLeft == bottomRight && topLeft == bottomLeft) {
-        addRoundRect(
-            0f,
-            0f,
-            width,
-            height,
-            topLeft,
-            topLeft,
-            Path.Direction.CW
-        )
-        return
-    }
-    // difference radius
-    moveTo(0f, topLeft)
-    if (topLeft > 0) {
-        arcTo(
-            0f,
-            0f,
-            topLeft * 2,
-            topLeft * 2,
-            180f,
-            90f,
-            false
-        )
-    }
-    lineTo(width - topRight, 0f)
-    if (topRight > 0) {
-        arcTo(
-            width - topRight * 2,
-            0f,
-            width,
-            topRight * 2,
-            270f,
-            90f,
-            false
-        )
-    }
-    lineTo(width, height - bottomRight)
-    if (bottomRight > 0) {
-        arcTo(
-            width - bottomRight * 2,
-            height - bottomRight * 2,
-            width,
-            height,
-            0f,
-            90f,
-            false
-        )
-    }
-    lineTo(bottomLeft, height)
-    if (bottomLeft > 0) {
-        arcTo(
-            0f,
-            height - bottomLeft * 2,
-            bottomLeft * 2,
-            height,
-            90f,
-            90f,
-            false
-        )
-    }
-    close()
+private fun Path.addRoundRect2(tL: Float, tR: Float, bL: Float, bR: Float, w: Float, h: Float) {
+    val radii = floatArrayOf(tL, tL, tR, tR, bL, bL, bR, bR)
+    addRoundRect(0f, 0f, w, h, radii, Path.Direction.CW)
 }

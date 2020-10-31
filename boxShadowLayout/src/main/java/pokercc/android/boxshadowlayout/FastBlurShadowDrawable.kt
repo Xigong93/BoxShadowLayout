@@ -1,8 +1,8 @@
 package pokercc.android.boxshadowlayout
 
-import android.graphics.*
-import android.os.Trace
-import android.util.Log
+import android.graphics.Bitmap
+import android.graphics.Paint
+import android.graphics.Path
 
 
 internal class FastBlurShadowDrawable(shadowPath: Path) : BitmapShadowDrawable(shadowPath) {
@@ -16,15 +16,7 @@ internal class FastBlurShadowDrawable(shadowPath: Path) : BitmapShadowDrawable(s
 
 
     private fun Bitmap.fastBlur(radius: Float): Bitmap {
-        val startTime = System.currentTimeMillis()
-        Log.d(
-            LOG_TAG,
-            "fastBlur,width:${width},height:${height},radius:${radius}"
-        )
-        Trace.beginSection("${LOG_TAG}:fastBlur")
         val bitmap = fastBlur(this, radius.toInt())
-        Trace.endSection()
-        Log.d(LOG_TAG, "fastBlur,passed ${System.currentTimeMillis() - startTime}ms")
         return bitmap
     }
 

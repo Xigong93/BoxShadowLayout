@@ -17,7 +17,7 @@ internal class BlurMaskBitmapShadowDrawable(shadowPath: Path) : BitmapShadowDraw
     override fun onDrawBitmap(bitmap: Bitmap) {
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        canvas.translate(shadowBlur, shadowBlur)
+        canvas.translate(shadowBlur * 2, shadowBlur * 2)
         canvas.drawPath(shadowPath, shadowPaint)
     }
 

@@ -1,26 +1,20 @@
 package pokercc.android.boxshadowlayout
 
-import android.graphics.*
-import android.os.Trace
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Path
+import android.graphics.Rect
 import androidx.annotation.CallSuper
 
 internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(shadowPath) {
 
-    companion object {
-        private const val LOG_TAG = "BitmapShadowDrawable"
-    }
 
     private var bitmap: Bitmap? = null
     private var bitmapDrawOver = false
     final override fun draw(canvas: Canvas) {
-        Trace.beginSection("${LOG_TAG}:draw")
-        try {
-            val rawBitmap = bitmap ?: return
-            drawBitmap(rawBitmap)
-            canvas.drawBitmap(rawBitmap, -shadowBlur, -shadowBlur, null)
-        } finally {
-            Trace.endSection()
-        }
+        val rawBitmap = bitmap ?: return
+        drawBitmap(rawBitmap)
+        canvas.drawBitmap(rawBitmap, -shadowBlur * 2, -shadowBlur * 2, null)
     }
 
 
@@ -41,8 +35,8 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
     private fun createBitmap() {
         bitmap?.recycle()
         bitmap = Bitmap.createBitmap(
-            ((bounds.width() + shadowBlur * 2)).toInt(),
-            ((bounds.height() + shadowBlur * 2)).toInt(),
+            ((bounds.width() + shadowBlur * 4)).toInt(),
+            ((bounds.height() + shadowBlur * 4)).toInt(),
             Bitmap.Config.ARGB_8888
         )
     }
@@ -54,5 +48,6 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
     }
 
     abstract fun onDrawBitmap(bitmap: Bitmap)
+
 
 }
