@@ -152,7 +152,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setShadowColor(@ColorInt shadowColor: Int) {
         this.shadowColor = shadowColor
-        shadowDrawable.shadowColor = shadowColor
+        shadowDrawable.setShadowColor(shadowColor)
         invalidate()
     }
 
@@ -160,13 +160,13 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     fun setShadowBlur(shadowBlur: Float) {
         this.shadowBlur = shadowBlur
-        shadowDrawable.shadowBlur = shadowBlur
+        shadowDrawable.setShadowBlur(shadowBlur)
         invalidate()
     }
 
     fun setShadowInset(shadowInset: Boolean) {
         this.shadowInset = shadowInset
-        shadowDrawable.shadowInset = shadowInset
+        shadowDrawable.setShadowInset(shadowInset)
         invalidate()
     }
 

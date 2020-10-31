@@ -1,17 +1,19 @@
 package pokercc.android.boxshadowlayout
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Paint
+import android.graphics.Path
 import android.os.Trace
-import android.util.Log
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.util.Log
 
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :
-    ShadowDrawable(shadowPath) {
+    BitmapShadowDrawable(shadowPath) {
     companion object {
         private const val LOG_TAG = "RenderScriptShadow"
     }
@@ -20,42 +22,15 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         style = Paint.Style.FILL
     }
 
-    override var shadowBlur: Float = 0f
-    override var shadowInset: Boolean = false
-    override var shadowColor: Int = Color.WHITE
-        set(value) {
-            field = value
-            shadowPaint.color = value
-        }
 
-    override fun draw(canvas: Canvas) {
-        Trace.beginSection("${LOG_TAG}:draw")
-        val rawBitmap = rawBitmap ?: return
-        val blurBitmap = blurBitmap ?: return
-        val bitmapCanvas = Canvas(rawBitmap)
-        bitmapCanvas.drawPath(shadowPath, shadowPaint)
-        blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
-        canvas.drawBitmap(blurBitmap, bounds.left.toFloat(), bounds.top.toFloat(), null)
-        Trace.endSection()
+    override fun onDrawBitmap(bitmap: Bitmap) {
+
+
     }
 
-    private var rawBitmap: Bitmap? = null
-    private var blurBitmap: Bitmap? = null
-    override fun onBoundsChange(bounds: Rect) {
-        super.onBoundsChange(bounds)
-        rawBitmap?.recycle()
-        rawBitmap = createBitmap(bounds)
-        blurBitmap?.recycle()
-        blurBitmap = createBitmap(bounds)
+    override fun onShadowChange(blur: Float, color: Int, inset: Boolean) {
     }
 
-    private fun createBitmap(bounds: Rect): Bitmap {
-        return Bitmap.createBitmap(
-            ((bounds.width() + shadowBlur * 2)).toInt(),
-            ((bounds.height() + shadowBlur * 2)).toInt(),
-            Bitmap.Config.ARGB_8888
-        )
-    }
 
     private fun blurBitmap(
         context: Context,
