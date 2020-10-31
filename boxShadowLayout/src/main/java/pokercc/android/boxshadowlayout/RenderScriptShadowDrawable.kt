@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.*
 import android.os.Trace
 import android.util.Log
-import androidx.renderscript.Allocation
-import androidx.renderscript.Element
-import androidx.renderscript.RenderScript
-import androidx.renderscript.ScriptIntrinsicBlur
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :

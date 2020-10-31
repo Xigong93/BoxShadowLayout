@@ -22,13 +22,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:shadowBlur="8dp"
         app:shadowColor="#f00"
-        app:shadowInset="false"
-        app:shadowOffsetHorizontal="5dp"
-        app:shadowOffsetVertical="5dp">
+        app:shadowInset="false">
 
         <ImageView
             android:layout_width="match_parent"
-            android:alpha="0"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:src="@drawable/unsplash_01"

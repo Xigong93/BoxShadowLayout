@@ -38,7 +38,8 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     }
     private val shadowPath = Path()
 
-    private val shadowDrawable: ShadowDrawable = FastBlurShadowDrawable(shadowPath)
+    private val shadowDrawable: ShadowDrawable = BlurMaskBitmapShadowDrawable(shadowPath)
+//    private val shadowDrawable: ShadowDrawable = BlurMaskShadowDrawable(shadowPath)
 //    private val shadowDrawable: ShadowDrawable =RenderScriptShadowDrawable(context, shadowPath)
 //    private val shadowDrawable: ShadowDrawable =
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
