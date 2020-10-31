@@ -3,13 +3,14 @@ package pokercc.android.boxshadowlayout;
 import android.graphics.Bitmap;
 
 class FastBlur {
-    static void fastBlur(Bitmap originBitmap, Bitmap targetBitmap, int radius) {
-
-        int w = originBitmap.getWidth();
-        int h = originBitmap.getHeight();
+    static Bitmap fastBlur(Bitmap bitmap, int radius) {
+        bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), false);
+        bitmap = bitmap.copy(bitmap.getConfig(), true);
+        final int w = bitmap.getWidth();
+        final int h = bitmap.getHeight();
 
         int[] pix = new int[w * h];
-        originBitmap.getPixels(pix, 0, w, 0, 0, w, h);
+        bitmap.getPixels(pix, 0, w, 0, 0, w, h);
 
         int wm = w - 1;
         int hm = h - 1;
@@ -193,7 +194,7 @@ class FastBlur {
                 yi += w;
             }
         }
-
-        targetBitmap.setPixels(pix, 0, w, 0, 0, w, h);
+        bitmap.setPixels(pix, 0, w, 0, 0, w, h);
+        return bitmap;
     }
 }

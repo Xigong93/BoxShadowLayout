@@ -9,10 +9,13 @@ import androidx.renderscript.Element
 import androidx.renderscript.RenderScript
 import androidx.renderscript.ScriptIntrinsicBlur
 
-private const val LOG_TAG = "RenderScriptShadow"
 
 internal class RenderScriptShadowDrawable(private val context: Context, shadowPath: Path) :
     ShadowDrawable(shadowPath) {
+    companion object {
+        private const val LOG_TAG = "RenderScriptShadow"
+    }
+
     private val shadowPaint = Paint().apply {
         style = Paint.Style.FILL
     }
@@ -31,8 +34,7 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
         val blurBitmap = blurBitmap ?: return
         val bitmapCanvas = Canvas(rawBitmap)
         bitmapCanvas.drawPath(shadowPath, shadowPaint)
-//        blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
-        fastBlur(context, rawBitmap, blurBitmap, shadowBlur)
+        blurBitmap(context, rawBitmap, blurBitmap, shadowBlur)
         canvas.drawBitmap(blurBitmap, bounds.left.toFloat(), bounds.top.toFloat(), null)
         Trace.endSection()
     }
@@ -54,40 +56,35 @@ internal class RenderScriptShadowDrawable(private val context: Context, shadowPa
             Bitmap.Config.ARGB_8888
         )
     }
-}
 
-internal fun blurBitmap(context: Context, originBitmap: Bitmap, blurBitmap: Bitmap, radius: Float) {
-    val startTime = System.currentTimeMillis()
-    Log.d(
-        LOG_TAG,
-        "blurBitmap,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
-    )
-    Trace.beginSection("${LOG_TAG}:blurBitmap")
-    val renderScript = RenderScript.create(context)
-    val allocation = Allocation.createFromBitmap(
-        renderScript, originBitmap,
-        Allocation.MipmapControl.MIPMAP_NONE,
-        Allocation.USAGE_SCRIPT
-    )
-    val output = Allocation.createTyped(renderScript, allocation.type)
-    val script = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
-    script.setRadius(radius)
-    script.setInput(allocation)
-    script.forEach(output)
-    output.copyTo(blurBitmap)
-    renderScript.destroy()
-    Trace.endSection()
-    Log.d(LOG_TAG, "blurBitmap,passed ${System.currentTimeMillis() - startTime}ms")
-}
+    private fun blurBitmap(
+        context: Context,
+        originBitmap: Bitmap,
+        blurBitmap: Bitmap,
+        radius: Float
+    ) {
+        val startTime = System.currentTimeMillis()
+        Log.d(
+            LOG_TAG,
+            "blurBitmap,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
+        )
+        Trace.beginSection("${LOG_TAG}:blurBitmap")
+        val renderScript = RenderScript.create(context, RenderScript.ContextType.PROFILE)
+        val allocation = Allocation.createFromBitmap(
+            renderScript, originBitmap,
+            Allocation.MipmapControl.MIPMAP_NONE,
+            Allocation.USAGE_SCRIPT
+        )
+        val output = Allocation.createTyped(renderScript, allocation.type)
+        val script = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
+        script.setRadius(radius)
+        script.setInput(allocation)
+        script.forEach(output)
+        output.copyTo(blurBitmap)
+        renderScript.destroy()
+        Trace.endSection()
+        Log.d(LOG_TAG, "blurBitmap,passed ${System.currentTimeMillis() - startTime}ms")
+    }
 
-internal fun fastBlur(context: Context, originBitmap: Bitmap, blurBitmap: Bitmap, radius: Float) {
-    val startTime = System.currentTimeMillis()
-    Log.d(
-        LOG_TAG,
-        "fastBlur,width:${originBitmap.width},height:${originBitmap.height},radius:${radius}"
-    )
-    Trace.beginSection("${LOG_TAG}:fastBlur")
-    FastBlur.fastBlur(originBitmap, blurBitmap, radius.toInt())
-    Trace.endSection()
-    Log.d(LOG_TAG, "fastBlur,passed ${System.currentTimeMillis() - startTime}ms")
+
 }

@@ -2,7 +2,6 @@ package pokercc.android.boxshadowlayout
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -39,7 +38,8 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
     }
     private val shadowPath = Path()
 
-    private val shadowDrawable: ShadowDrawable =RenderScriptShadowDrawable(context, shadowPath)
+    private val shadowDrawable: ShadowDrawable = FastBlurShadowDrawable(shadowPath)
+//    private val shadowDrawable: ShadowDrawable =RenderScriptShadowDrawable(context, shadowPath)
 //    private val shadowDrawable: ShadowDrawable =
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 //            BlurMaskShadowDrawable(shadowPath)
@@ -194,7 +194,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         this.bottomRightBoxRadius = bottomRight.absoluteValue
         clipPath.reset()
         clipPath.fillType = Path.FillType.INVERSE_WINDING
-        clipPath.setRoundRect(
+        clipPath.addRoundRect(
             this.topLeftBoxRadius,
             this.topRightBoxRadius,
             this.bottomLeftBoxRadius,
@@ -204,7 +204,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
         )
         shadowPath.reset()
         shadowPath.fillType = Path.FillType.WINDING
-        shadowPath.setRoundRect(
+        shadowPath.addRoundRect(
             this.topLeftBoxRadius,
             this.topRightBoxRadius,
             this.bottomLeftBoxRadius,
@@ -232,7 +232,7 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
 }
 
-private fun Path.setRoundRect(
+private fun Path.addRoundRect(
     topLeft: Float,
     topRight: Float,
     bottomLeft: Float,
