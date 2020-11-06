@@ -57,20 +57,3 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 }
-def localProperties() {
-    Properties properties = new Properties()
-    File localFile = project.rootProject.file('local.properties')
-    if (localFile.exists()) {
-        properties.load(localFile.newDataInputStream())
-    }
-    return properties
-}
-
-Properties properties = localProperties()
-
-apply plugin: UploadPgyer
-UploadConfig {
-    appName("ExpandableRecyclerView")
-    appDownloadUrl("https://pgyer.com/ExpandableRecyclerView")
-    pgyerApiKey(properties.getProperty("pgyer.apikey"))
-}
