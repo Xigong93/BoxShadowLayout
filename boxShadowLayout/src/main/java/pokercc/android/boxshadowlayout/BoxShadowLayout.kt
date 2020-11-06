@@ -16,7 +16,9 @@ import kotlin.math.absoluteValue
  * @date 2020-10-20 00:10:19
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class BoxShadowLayout @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
         private const val LOG_TAG = "BoxShadowLayout"
@@ -52,15 +54,13 @@ class BoxShadowLayout(context: Context, attrs: AttributeSet? = null) : FrameLayo
 
     init {
         setWillNotDraw(false)
-        init(attrs, 0)
+        init(attrs, defStyleAttr)
     }
 
 
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
+    private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
         // Load attributes
-        context.obtainStyledAttributes(
-            attrs, R.styleable.BoxShadowLayout, defStyle, 0
-        ).apply {
+        context.obtainStyledAttributes(attrs, R.styleable.BoxShadowLayout, defStyleAttr, 0).apply {
             val vOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetVertical, 0f)
             setShadowVerticalOffset(vOffset)
             val hOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetHorizontal, 0f)
