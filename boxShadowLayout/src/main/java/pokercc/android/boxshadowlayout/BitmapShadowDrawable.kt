@@ -39,12 +39,22 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
             ((bounds.height() + shadowBlur * 4)).toInt(),
             Bitmap.Config.ARGB_8888
         )
+        invalidateCache()
     }
 
+    override fun invalidateCache() {
+        bitmapDrawOver = false
+
+    }
     private fun drawBitmap(bitmap: Bitmap) {
         if (bitmapDrawOver) return
         onDrawBitmap(bitmap)
         bitmapDrawOver = true
+    }
+
+    @CallSuper
+    override fun onShadowChange(blur: Float, color: Int, inset: Boolean) {
+        invalidateCache()
     }
 
     abstract fun onDrawBitmap(bitmap: Bitmap)

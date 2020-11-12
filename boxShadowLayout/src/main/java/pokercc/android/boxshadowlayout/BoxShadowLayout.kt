@@ -248,6 +248,7 @@ class BoxShadowLayout @JvmOverloads constructor(
         shadowPathOffsetX = -shadowSpread + shadowHorizontalOffset
         shadowPathOffsetY = -shadowSpread + shadowVerticalOffset
         shadowPath.offset(shadowPathOffsetX, shadowPathOffsetY)
+        shadowDrawable.invalidateCache()
     }
 
     @Px

@@ -22,6 +22,7 @@ internal class BlurMaskBitmapShadowDrawable(shadowPath: Path) : BitmapShadowDraw
     }
 
     override fun onShadowChange(blur: Float, color: Int, inset: Boolean) {
+        super.onShadowChange(blur, color, inset)
         val type = if (this.shadowInset) {
             BlurMaskFilter.Blur.INNER
         } else {
