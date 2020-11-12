@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import kotlin.math.absoluteValue
 
 /**
@@ -146,20 +147,22 @@ class BoxShadowLayout @JvmOverloads constructor(
     }
 
 
-    fun setShadowVerticalOffset(shadowVerticalOffset: Float) {
+    fun setShadowVerticalOffset(@Px shadowVerticalOffset: Float) {
         this.shadowVerticalOffset = shadowVerticalOffset
         resetShadowOffset()
         invalidate()
     }
 
+    @Px
     fun getShadowVerticalOffset(): Float = this.shadowVerticalOffset
 
-    fun setShadowHorizontalOffset(shadowHorizontalOffset: Float) {
+    fun setShadowHorizontalOffset(@Px shadowHorizontalOffset: Float) {
         this.shadowHorizontalOffset = shadowHorizontalOffset
         resetShadowOffset()
         invalidate()
     }
 
+    @Px
     fun getShadowHorizontalOffset(): Float = this.shadowHorizontalOffset
 
     fun setShadowColor(@ColorInt shadowColor: Int) {
@@ -170,7 +173,7 @@ class BoxShadowLayout @JvmOverloads constructor(
 
     fun getShadowColor(): Int = this.shadowColor
 
-    fun setShadowBlur(shadowBlur: Float) {
+    fun setShadowBlur(@Px shadowBlur: Float) {
         this.shadowBlur = shadowBlur
         shadowDrawable.setShadowBlur(shadowBlur)
         invalidate()
@@ -185,14 +188,16 @@ class BoxShadowLayout @JvmOverloads constructor(
 
     fun isShadowInset(): Boolean = this.shadowInset
 
-    fun setShadowSpread(shadowSpread: Float) {
+    fun setShadowSpread(@Px shadowSpread: Float) {
         this.shadowSpread = shadowSpread
+        resetShadowOffset()
         invalidate()
     }
 
+    @Px
     fun getShadowSpread() = shadowSpread
 
-    fun setBoxRadius(radius: Float) {
+    fun setBoxRadius(@Px radius: Float) {
         this.boxRadius = radius.absoluteValue
         setBoxRadius(this.boxRadius, this.boxRadius, this.boxRadius, this.boxRadius)
     }
@@ -200,7 +205,12 @@ class BoxShadowLayout @JvmOverloads constructor(
 
     fun getRadius(): Float = this.boxRadius
 
-    fun setBoxRadius(topLeft: Float, topRight: Float, bottomLeft: Float, bottomRight: Float) {
+    fun setBoxRadius(
+        @Px topLeft: Float,
+        @Px topRight: Float,
+        @Px bottomLeft: Float,
+        @Px bottomRight: Float
+    ) {
         this.topLeftBoxRadius = topLeft.absoluteValue
         this.topRightBoxRadius = topRight.absoluteValue
         this.bottomLeftBoxRadius = bottomLeft.absoluteValue
@@ -216,6 +226,8 @@ class BoxShadowLayout @JvmOverloads constructor(
             height.toFloat()
         )
         shadowPath.reset()
+        shadowPathOffsetX = 0f
+        shadowPathOffsetY = 0f
         shadowPath.fillType = Path.FillType.WINDING
         shadowPath.addRoundRect2(
             this.topLeftBoxRadius,
@@ -229,23 +241,31 @@ class BoxShadowLayout @JvmOverloads constructor(
         invalidate()
     }
 
+    private var shadowPathOffsetX = 0f
+    private var shadowPathOffsetY = 0f
     private fun resetShadowOffset() {
-        shadowPath.offset(
-            -shadowSpread + shadowHorizontalOffset,
-            -shadowSpread + shadowVerticalOffset
-        )
-
+        shadowPath.offset(-shadowPathOffsetX, -shadowPathOffsetY)
+        shadowPathOffsetX = -shadowSpread + shadowHorizontalOffset
+        shadowPathOffsetY = -shadowSpread + shadowVerticalOffset
+        shadowPath.offset(shadowPathOffsetX, shadowPathOffsetY)
     }
 
+    @Px
     fun getTopLeftRadius() = topLeftBoxRadius
+
+    @Px
     fun getTopRightRadius() = topRightBoxRadius
+
+    @Px
     fun getBottomRightRadius() = bottomRightBoxRadius
+
+    @Px
     fun getBottomLeftRadius() = bottomLeftBoxRadius
 
 
 }
 
 private fun Path.addRoundRect2(tL: Float, tR: Float, bL: Float, bR: Float, w: Float, h: Float) {
-    val radii = floatArrayOf(tL, tL, tR, tR, bL, bL, bR, bR)
+    val radii = floatArrayOf(tL, tL, tR, tR, bR, bR, bL, bL)
     addRoundRect(0f, 0f, w, h, radii, Path.Direction.CW)
 }
