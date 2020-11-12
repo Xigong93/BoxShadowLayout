@@ -10,11 +10,13 @@
     tools:ignore="UnusedAttribute">
 
     <pokercc.android.boxshadowlayout.BoxShadowLayout
+        android:id="@+id/box_shadow_layout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
+        android:transitionName="@string/box_shadow_image_transition"
         app:boxRadius="20dp"
         app:boxRadiusBottomLeft="8dp"
         app:boxRadiusBottomRight="8dp"
@@ -31,5 +33,14 @@
             android:src="@drawable/unsplash_01"
             tools:ignore="ContentDescription" />
     </pokercc.android.boxshadowlayout.BoxShadowLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/test_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="80dp"
+        android:text="test"
+        tools:ignore="HardcodedText" />
 
 </FrameLayout>

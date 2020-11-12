@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BoxShadowLayout</string>
+    <string name="box_shadow_image_transition">box_shadow_image_transition</string>
 </resources>
