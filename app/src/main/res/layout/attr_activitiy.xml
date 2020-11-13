@@ -331,5 +331,12 @@
                 android:text="dp"
                 android:textSize="@dimen/test_text_size" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/animation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="animation" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

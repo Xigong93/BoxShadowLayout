@@ -8,16 +8,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.NumberPicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.widget.doOnTextChanged
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
-import pokercc.android.boxshadowlayout.demo.databinding.ActivityTestBinding
+import pokercc.android.boxshadowlayout.demo.databinding.AttrActivitiyBinding
 
 
-class TestActivity : AppCompatActivity() {
+class AttrActivity : AppCompatActivity() {
     companion object {
         fun start(activity: Activity, shareView: View, shareElementName: String) {
             val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -26,18 +25,21 @@ class TestActivity : AppCompatActivity() {
                 shareElementName
             )
             activity.startActivity(
-                Intent(activity, TestActivity::class.java),
+                Intent(activity, AttrActivity::class.java),
                 activityOptions.toBundle()
             )
         }
     }
 
-    private val binding by lazy { ActivityTestBinding.inflate(layoutInflater) }
+    private val binding by lazy { AttrActivitiyBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setClickEvents()
+        binding.animationButton.setOnClickListener {
+            AnimationActivity.start(it.context)
+        }
     }
 
     private fun setClickEvents() {

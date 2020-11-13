@@ -35,12 +35,12 @@
     </pokercc.android.boxshadowlayout.BoxShadowLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/test_button"
+        android:id="@+id/performance_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="80dp"
-        android:text="test"
+        android:text="performance"
         tools:ignore="HardcodedText" />
 
 </FrameLayout>

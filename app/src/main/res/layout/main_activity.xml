@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:forceDarkAllowed="false"
+    tools:context=".MainActivity"
+    tools:ignore="UnusedAttribute">
+
+    <pokercc.android.boxshadowlayout.BoxShadowLayout
+        android:id="@+id/box_shadow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:transitionName="@string/box_shadow_image_transition"
+        app:boxRadius="20dp"
+        app:boxRadiusBottomLeft="8dp"
+        app:boxRadiusBottomRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shadowBlur="8dp"
+        app:shadowColor="#f00"
+        app:shadowInset="false">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/unsplash_01"
+            tools:ignore="ContentDescription" />
+    </pokercc.android.boxshadowlayout.BoxShadowLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/attr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="80dp"
+        android:text="Attributes"
+        tools:ignore="HardcodedText" />
+
+</FrameLayout>
