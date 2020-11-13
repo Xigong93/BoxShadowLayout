@@ -23,7 +23,7 @@ class AnimationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.performanceButton.setOnClickListener {
-
+            PerformanceActivity.start(it.context)
         }
         binding.root.doOnPreDraw {
             startAnimation()

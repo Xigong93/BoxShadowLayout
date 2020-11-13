@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pokercc.android.boxshadowlayout.BoxShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:boxRadius="8dp"
+    app:shadowBlur="8dp"
+    app:shadowColor="#7a7a7a">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textSize="28dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage"
+            tools:text="7" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</pokercc.android.boxshadowlayout.BoxShadowLayout>
