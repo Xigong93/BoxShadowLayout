@@ -19,6 +19,7 @@ class AnimationActivity : AppCompatActivity() {
     }
 
     private val binding by lazy { AnimationActivityBinding.inflate(layoutInflater) }
+    private var anim: AnimatorSet? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -69,7 +70,9 @@ class AnimationActivity : AppCompatActivity() {
             Dp(0f).toPx().toFloat(),
             Dp(20f).toPx().toFloat()
         )
+        anim?.cancel()
         val animatorSet = AnimatorSet()
+        anim = animatorSet
         animatorSet.duration = 2000
         animatorSet.playSequentially(
             blurColorAnim,
@@ -82,5 +85,10 @@ class AnimationActivity : AppCompatActivity() {
         animatorSet.doOnEnd {
             startAnimation()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        anim?.cancel()
     }
 }
