@@ -1,6 +1,6 @@
 # BoxShadowLayout
 实现了类似css3中的box-shadow 属性，并且支持裁减圆角像CardView一样。阴影不占据View的空间。以实现类似ios的阴影效果
-支持安卓系统版本大于Android 21
+
 ## Shadow Properties
 xml 属性|方法|对应的css中box-shadow属性|描述
 --|--|--|--
@@ -50,3 +50,8 @@ boxRadiusBottomRight|setBoxRadius()| 设置右下圆角大小
 
 ## 效果图
 <img src="./box_shadow_sample01.jpg"  width="80%" height="80%"/>
+
+## 兼容性
+支持安卓系统版本Android 21及以上,效果完全一致
+在android 28 及以上，使用GPU渲染高斯模糊，低版本使用Bitmap,配合离屏Canvas绘制高斯模糊
+

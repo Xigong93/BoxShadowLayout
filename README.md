@@ -50,3 +50,6 @@ boxRadiusBottomRight|setBoxRadius()| ..
 
 ## Design sketch
 <img src="./box_shadow_sample01.jpg"  width="80%" height="80%"/>
+
+## Compatibility
+Working with min version is android 21. Same effect on all device.
