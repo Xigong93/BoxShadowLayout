@@ -1,20 +1,20 @@
 package pokercc.android.boxshadowlayout.demo
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import pokercc.android.boxshadowlayout.demo.databinding.MainActivityBinding
+import androidx.appcompat.app.AppCompatActivity
+import pokercc.android.boxshadowlayout.demo.databinding.MainActivityBinding as Binding
 
 class MainActivity : AppCompatActivity() {
-    private val binding by lazy { MainActivityBinding.inflate(layoutInflater) }
+    private val binding by lazy { Binding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.attrButton.setOnClickListener {
-            AttrActivity.start(
-                this,
-                binding.boxShadowLayout,
-                binding.boxShadowLayout.transitionName
-            )
+            val shareView = binding.boxShadowLayout
+            AttrActivity.start(this, shareView, shareView.transitionName)
+        }
+        binding.animButton.setOnClickListener {
+            AnimationActivity.start(it.context)
         }
     }
 }

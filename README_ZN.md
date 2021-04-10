@@ -28,16 +28,16 @@ boxRadiusBottomRight|setBoxRadius()| 设置右下圆角大小
     android:layout_gravity="center"
     android:layout_marginStart="60dp"
     android:layout_marginEnd="60dp"
-    app:boxRadius="20dp"
-    app:boxRadiusBottomLeft="8dp"
-    app:boxRadiusBottomRight="8dp"
+    app:box_radius="20dp"
+    app:box_radiusBottomLeft="8dp"
+    app:box_radiusBottomRight="8dp"
+    app:box_shadowBlur="8dp"
+    app:box_shadowColor="#f00"
+    app:box_shadowInset="false"
+    app:box_shadowOffsetHorizontal="5dp"
+    app:box_shadowOffsetVertical="5dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:shadowBlur="8dp"
-    app:shadowColor="#f00"
-    app:shadowInset="false"
-    app:shadowOffsetHorizontal="5dp"
-    app:shadowOffsetVertical="5dp">
+    app:layout_constraintEnd_toEndOf="parent">
 
     <ImageView
         android:layout_width="match_parent"

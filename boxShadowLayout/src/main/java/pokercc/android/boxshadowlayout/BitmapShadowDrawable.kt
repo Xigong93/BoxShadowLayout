@@ -26,14 +26,12 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
     @CallSuper
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
-        bitmapDrawOver = false
         invalidateCache()
     }
 
     @CallSuper
     override fun setShadowBlur(blur: Float) {
         super.setShadowBlur(blur)
-        bitmapDrawOver = false
         invalidateCache()
     }
 
@@ -58,7 +56,6 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
 
     override fun invalidateCache() {
         bitmapDrawOver = false
-
     }
 
     private fun drawBitmap(bitmap: Bitmap) {

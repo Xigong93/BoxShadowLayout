@@ -4,21 +4,21 @@ Support Version >= Android 21
 ## Shadow Properties
 attr|method|css properties|desc
 --|--|--|--
-shadowOffsetVertical | setShadowVerticalOffset() | h-shadow | Required. The horizontal offset of the shadow. A positive value puts the shadow on the right side of the box, a negative value puts the shadow on the left side of the box|
-shadowOffsetHorizontal | setShadowHorizontalOffset() | v-shadow|Required. The vertical offset of the shadow. A positive value puts the shadow below the box, a negative value puts the shadow above the box|
-shadowBlur | setShadowBlur() | blur | Optional. The blur radius. The higher the number, the more blurred the shadow will be
-shadowSpread| setShadowSpread() | spread | Optional. The spread radius. A positive value increases the size of the shadow, a negative value decreases the size of the shadow
-shadowColor | setShadowColor |color | Optional. The color of the shadow. The default value is the text color. Look at CSS Color Values for a complete list of possible color values. 
-shadowInset | setShadowInset | inset | Optional. Changes the shadow from an outer shadow (outset) to an inner shadow
+box_shadowOffsetVertical | setShadowVerticalOffset() | h-shadow | Required. The horizontal offset of the shadow. A positive value puts the shadow on the right side of the box, a negative value puts the shadow on the left side of the box|
+box_shadowOffsetHorizontal | setShadowHorizontalOffset() | v-shadow|Required. The vertical offset of the shadow. A positive value puts the shadow below the box, a negative value puts the shadow above the box|
+box_shadowBlur | setShadowBlur() | blur | Optional. The blur radius. The higher the number, the more blurred the shadow will be
+box_shadowSpread| setShadowSpread() | spread | Optional. The spread radius. A positive value increases the size of the shadow, a negative value decreases the size of the shadow
+box_shadowColor | setShadowColor |color | Optional. The color of the shadow. The default value is the text color. Look at CSS Color Values for a complete list of possible color values. 
+box_shadowInset | setShadowInset | inset | Optional. Changes the shadow from an outer shadow (outset) to an inner shadow
 
 ## Radius Properties
 radius attr | method |desc
 --|--|--
-boxRadius | setBoxRadius() | set round radius
-boxRadiusTopLeft|setBoxRadius()| ..
-boxRadiusTopRight|setBoxRadius()| ..
-boxRadiusBottomLeft|setBoxRadius()| ..
-boxRadiusBottomRight|setBoxRadius()| ..
+box_radius | setBoxRadius() | set round radius
+box_radiusTopLeft|setBoxRadius()| ..
+box_radiusTopRight|setBoxRadius()| ..
+box_radiusBottomLeft|setBoxRadius()| ..
+box_radiusBottomRight|setBoxRadius()| ..
 
 ## Sample xml
 ```xml
@@ -28,16 +28,16 @@ boxRadiusBottomRight|setBoxRadius()| ..
     android:layout_gravity="center"
     android:layout_marginStart="60dp"
     android:layout_marginEnd="60dp"
-    app:boxRadius="20dp"
-    app:boxRadiusBottomLeft="8dp"
-    app:boxRadiusBottomRight="8dp"
+    app:box_radius="20dp"
+    app:box_radiusBottomLeft="8dp"
+    app:box_radiusBottomRight="8dp"
+    app:box_shadowBlur="8dp"
+    app:box_shadowColor="#f00"
+    app:box_shadowInset="false"
+    app:box_shadowOffsetHorizontal="5dp"
+    app:box_shadowOffsetVertical="5dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:shadowBlur="8dp"
-    app:shadowColor="#f00"
-    app:shadowInset="false"
-    app:shadowOffsetHorizontal="5dp"
-    app:shadowOffsetVertical="5dp">
+    app:layout_constraintEnd_toEndOf="parent">
 
     <ImageView
         android:layout_width="match_parent"
