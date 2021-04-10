@@ -87,6 +87,14 @@ class AnimationActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        anim?.resume()
+    }
+    override fun onPause() {
+        super.onPause()
+        anim?.pause()
+    }
     override fun onDestroy() {
         super.onDestroy()
         anim?.cancel()

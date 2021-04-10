@@ -17,14 +17,14 @@
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
         android:transitionName="@string/box_shadow_image_transition"
-        app:boxRadius="20dp"
-        app:boxRadiusBottomLeft="8dp"
-        app:boxRadiusBottomRight="8dp"
+        app:box_radius="20dp"
+        app:box_radiusBottomLeft="8dp"
+        app:box_radiusBottomRight="8dp"
+        app:box_shadowBlur="8dp"
+        app:box_shadowColor="#f00"
+        app:box_shadowInset="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:shadowBlur="8dp"
-        app:shadowColor="#f00"
-        app:shadowInset="false">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:layout_width="match_parent"

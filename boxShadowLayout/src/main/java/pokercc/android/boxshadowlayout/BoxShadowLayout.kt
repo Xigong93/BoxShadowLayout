@@ -62,25 +62,30 @@ class BoxShadowLayout @JvmOverloads constructor(
     private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
         // Load attributes
         context.obtainStyledAttributes(attrs, R.styleable.BoxShadowLayout, defStyleAttr, 0).apply {
-            val vOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetVertical, 0f)
+            val vOffset = getDimension(R.styleable.BoxShadowLayout_box_shadowOffsetVertical, 0f)
             setShadowVerticalOffset(vOffset)
-            val hOffset = getDimension(R.styleable.BoxShadowLayout_shadowOffsetHorizontal, 0f)
+            val hOffset = getDimension(R.styleable.BoxShadowLayout_box_shadowOffsetHorizontal, 0f)
             setShadowHorizontalOffset(hOffset)
-            setShadowColor(getColor(R.styleable.BoxShadowLayout_shadowColor, 0xff888888.toInt()))
-            setShadowBlur(getDimension(R.styleable.BoxShadowLayout_shadowBlur, 0f))
-            setShadowInset(getBoolean(R.styleable.BoxShadowLayout_shadowInset, false))
-            setShadowSpread(getDimension(R.styleable.BoxShadowLayout_shadowSpread, 0f))
-            boxRadius = getDimension(R.styleable.BoxShadowLayout_boxRadius, 0f)
-            if (hasValue(R.styleable.BoxShadowLayout_boxRadiusTopLeft) ||
-                hasValue(R.styleable.BoxShadowLayout_boxRadiusTopRight) ||
-                hasValue(R.styleable.BoxShadowLayout_boxRadiusBottomLeft) ||
-                hasValue(R.styleable.BoxShadowLayout_boxRadiusBottomRight)
+            setShadowColor(
+                getColor(
+                    R.styleable.BoxShadowLayout_box_shadowColor,
+                    0xff888888.toInt()
+                )
+            )
+            setShadowBlur(getDimension(R.styleable.BoxShadowLayout_box_shadowBlur, 0f))
+            setShadowInset(getBoolean(R.styleable.BoxShadowLayout_box_shadowInset, false))
+            setShadowSpread(getDimension(R.styleable.BoxShadowLayout_box_shadowSpread, 0f))
+            boxRadius = getDimension(R.styleable.BoxShadowLayout_box_radius, 0f)
+            if (hasValue(R.styleable.BoxShadowLayout_box_radiusTopLeft) ||
+                hasValue(R.styleable.BoxShadowLayout_box_radiusTopRight) ||
+                hasValue(R.styleable.BoxShadowLayout_box_radiusBottomLeft) ||
+                hasValue(R.styleable.BoxShadowLayout_box_radiusBottomRight)
             ) {
                 setBoxRadius(
-                    getDimension(R.styleable.BoxShadowLayout_boxRadiusTopLeft, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_boxRadiusTopRight, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_boxRadiusBottomLeft, boxRadius),
-                    getDimension(R.styleable.BoxShadowLayout_boxRadiusBottomRight, boxRadius)
+                    getDimension(R.styleable.BoxShadowLayout_box_radiusTopLeft, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_box_radiusTopRight, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_box_radiusBottomLeft, boxRadius),
+                    getDimension(R.styleable.BoxShadowLayout_box_radiusBottomRight, boxRadius)
                 )
             } else {
                 setBoxRadius(boxRadius)

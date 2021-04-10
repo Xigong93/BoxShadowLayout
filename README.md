@@ -53,3 +53,6 @@ boxRadiusBottomRight|setBoxRadius()| ..
 
 ## Compatibility
 Working with min version is android 21. Same effect on all device.
+
+## Limitation
+Don't use blur api in animation. Low sdk version device use bitmap draw blur which consume large memory.

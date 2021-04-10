@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:boxRadius="8dp"
-    app:shadowBlur="8dp"
-    app:shadowColor="#7a7a7a">
+    app:box_radius="8dp"
+    app:box_shadowBlur="8dp"
+    app:box_shadowColor="#7a7a7a">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -55,3 +55,9 @@ boxRadiusBottomRight|setBoxRadius()| 设置右下圆角大小
 支持安卓系统版本Android 21及以上,效果完全一致
 在android 28 及以上，使用GPU渲染高斯模糊，低版本使用Bitmap,配合离屏Canvas绘制高斯模糊
 
+## 限制
+不要在动画中使用模糊api。低版本设备使用位图绘制模糊，消耗大内存。
+
+## 参考文章
+- https://xuyisheng.top/mdc-shape/
+-

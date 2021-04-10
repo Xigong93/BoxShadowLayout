@@ -37,8 +37,8 @@ class AttrActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setClickEvents()
-        binding.animationButton.setOnClickListener {
-            AnimationActivity.start(it.context)
+        binding.performanceButton.setOnClickListener {
+            PerformanceActivity.start(it.context)
         }
     }
 

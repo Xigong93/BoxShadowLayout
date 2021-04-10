@@ -4,14 +4,19 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.Rect
+import android.util.Log
 import androidx.annotation.CallSuper
 
 internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(shadowPath) {
+    companion object {
+        private const val LOG_TAG = "BitmapShadowDrawable"
+    }
 
 
     private var bitmap: Bitmap? = null
     private var bitmapDrawOver = false
     final override fun draw(canvas: Canvas) {
+        createBitmap()
         val rawBitmap = bitmap ?: return
         drawBitmap(rawBitmap)
         canvas.drawBitmap(rawBitmap, -shadowBlur * 2, -shadowBlur * 2, null)
@@ -22,23 +27,32 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
         bitmapDrawOver = false
-        createBitmap()
+        invalidateCache()
     }
 
     @CallSuper
     override fun setShadowBlur(blur: Float) {
         super.setShadowBlur(blur)
         bitmapDrawOver = false
-        createBitmap()
+        invalidateCache()
     }
 
     private fun createBitmap() {
-        bitmap?.recycle()
+        val newWidth = ((bounds.width() + shadowBlur * 4)).toInt()
+        val newHeight = ((bounds.height() + shadowBlur * 4)).toInt()
+        val oldBitmap = bitmap
+        if (oldBitmap != null && oldBitmap.width >= newWidth && oldBitmap.height >= newHeight) {
+            return
+        }
+        oldBitmap?.recycle()
         bitmap = Bitmap.createBitmap(
-            ((bounds.width() + shadowBlur * 4)).toInt(),
-            ((bounds.height() + shadowBlur * 4)).toInt(),
+            newWidth,
+            newHeight,
             Bitmap.Config.ARGB_8888
         )
+        if (BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "allocate bitmap (${bitmap?.width}x${bitmap?.height})")
+        }
         invalidateCache()
     }
 
@@ -46,6 +60,7 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
         bitmapDrawOver = false
 
     }
+
     private fun drawBitmap(bitmap: Bitmap) {
         if (bitmapDrawOver) return
         onDrawBitmap(bitmap)

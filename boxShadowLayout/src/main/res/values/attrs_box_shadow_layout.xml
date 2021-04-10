@@ -1,17 +1,17 @@
 <resources>
     <declare-styleable name="BoxShadowLayout">
         <!-- box-shadow attributes-->
-        <attr name="shadowOffsetVertical" format="dimension" />
-        <attr name="shadowOffsetHorizontal" format="dimension" />
-        <attr name="shadowBlur" format="dimension" />
-        <attr name="shadowSpread" format="dimension" />
-        <attr name="shadowColor" format="color|reference" />
-        <attr name="shadowInset" format="boolean" />
+        <attr name="box_shadowOffsetVertical" format="dimension" />
+        <attr name="box_shadowOffsetHorizontal" format="dimension" />
+        <attr name="box_shadowBlur" format="dimension" />
+        <attr name="box_shadowSpread" format="dimension" />
+        <attr name="box_shadowColor" format="color|reference" />
+        <attr name="box_shadowInset" format="boolean" />
         <!-- extended attributes-->
-        <attr name="boxRadius" format="dimension" />
-        <attr name="boxRadiusTopLeft" format="dimension" />
-        <attr name="boxRadiusTopRight" format="dimension" />
-        <attr name="boxRadiusBottomLeft" format="dimension" />
-        <attr name="boxRadiusBottomRight" format="dimension" />
+        <attr name="box_radius" format="dimension" />
+        <attr name="box_radiusTopLeft" format="dimension" />
+        <attr name="box_radiusTopRight" format="dimension" />
+        <attr name="box_radiusBottomLeft" format="dimension" />
+        <attr name="box_radiusBottomRight" format="dimension" />
     </declare-styleable>
 </resources>
