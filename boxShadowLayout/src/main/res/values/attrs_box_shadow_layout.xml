@@ -1,13 +1,20 @@
 <resources>
     <declare-styleable name="BoxShadowLayout">
         <!-- box-shadow attributes-->
-        <attr name="box_shadowOffsetVertical" format="dimension" />
+        <!-- 水平阴影的位置。允许负值。 -->
         <attr name="box_shadowOffsetHorizontal" format="dimension" />
+        <!-- 垂直阴影的位置。允许负值。 -->
+        <attr name="box_shadowOffsetVertical" format="dimension" />
+        <!-- 模糊距离 -->
         <attr name="box_shadowBlur" format="dimension" />
+        <!-- 阴影的尺寸 -->
         <attr name="box_shadowSpread" format="dimension" />
+        <!-- 阴影的颜色 -->
         <attr name="box_shadowColor" format="color|reference" />
+        <!-- 将外部阴影 (outset) 改为内部阴影 -->
         <attr name="box_shadowInset" format="boolean" />
         <!-- extended attributes-->
+        <!-- 圆角大小 -->
         <attr name="box_radius" format="dimension" />
         <attr name="box_radiusTopLeft" format="dimension" />
         <attr name="box_radiusTopRight" format="dimension" />
