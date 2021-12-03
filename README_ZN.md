@@ -1,4 +1,4 @@
-# BoxShadowLayout
+# BoxShadowLayout    [![](https://jitpack.io/v/Xigong93/BoxShadowLayout.svg)](https://jitpack.io/#Xigong93/BoxShadowLayout)
 实现了类似css3中的box-shadow 属性，并且支持裁减圆角像CardView一样。阴影不占据View的空间。以实现类似ios的阴影效果
 
 ## Shadow Properties

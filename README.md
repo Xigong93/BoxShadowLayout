@@ -1,4 +1,4 @@
-# BoxShadowLayout [中文](./README_ZN.md)
+# BoxShadowLayout [中文](./README_ZN.md)     [![](https://jitpack.io/v/Xigong93/BoxShadowLayout.svg)](https://jitpack.io/#Xigong93/BoxShadowLayout)
 BoxShadowLayout like box-shadow in web and enable set radius like cardView in android. Shadow outside of View bounds.
 Support Version >= Android 21
 ## Shadow Properties
