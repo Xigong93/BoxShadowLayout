@@ -1,4 +1,5 @@
 jdk:
   - openjdk11
 install:
+  - chmod +x gradlew
   - ./gradlew build :expandableRecyclerView:publishToMavenLocal
