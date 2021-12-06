@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClipActivity">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <pokercc.android.boxshadowlayout.BoxShadowLayout
+                    android:id="@+id/box_shadow_layout"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:transitionName="@string/box_shadow_image_transition"
+                    app:box_radius="20dp"
+                    app:box_radiusBottomLeft="8dp"
+                    app:box_radiusBottomRight="8dp"
+                    app:box_shadowBlur="8dp"
+                    app:box_shadowColor="#f00"
+                    app:box_shadowInset="false">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/unsplash_01"
+                        tools:ignore="ContentDescription" />
+                </pokercc.android.boxshadowlayout.BoxShadowLayout>
+
+            </FrameLayout>
+        </FrameLayout>
+    </FrameLayout>
+
+</FrameLayout>

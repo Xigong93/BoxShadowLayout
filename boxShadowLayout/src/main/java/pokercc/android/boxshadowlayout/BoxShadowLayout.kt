@@ -5,6 +5,8 @@ import android.graphics.*
 import android.os.Build
 import android.os.Trace
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
@@ -16,15 +18,14 @@ import kotlin.math.absoluteValue
  * @author pokercc
  * @date 2020-10-20 00:10:19
  */
+private const val LOG_TAG = "BoxShadowLayout"
+private const val DEBUG = false
+
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class BoxShadowLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    companion object {
-        private const val LOG_TAG = "BoxShadowLayout"
-        private const val DEBUG = false
-    }
 
     private val clipPath = Path()
     private var shadowColor = Color.RED
@@ -100,7 +101,7 @@ class BoxShadowLayout @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         // Tell parent don't clip me. Otherwise the shadow will be erase.
-        (parent as? ViewGroup)?.clipChildren = false
+        tellParentNotChip()
     }
 
     override fun draw(canvas: Canvas) {
@@ -274,4 +275,10 @@ class BoxShadowLayout @JvmOverloads constructor(
 private fun Path.addRoundRect2(tL: Float, tR: Float, bL: Float, bR: Float, w: Float, h: Float) {
     val radii = floatArrayOf(tL, tL, tR, tR, bR, bR, bL, bL)
     addRoundRect(0f, 0f, w, h, radii, Path.Direction.CW)
+}
+
+private fun View.tellParentNotChip() {
+    (parent as? ViewGroup)?.clipChildren = false
+    (parent as? ViewGroup)?.tellParentNotChip()
+    Log.i(LOG_TAG, "tellParentNotChip")
 }

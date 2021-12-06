@@ -3,12 +3,20 @@ package pokercc.android.boxshadowlayout.demo
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
+import android.widget.NumberPicker
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.widget.doOnTextChanged
 import com.flask.colorpicker.ColorPickerView
@@ -37,9 +45,7 @@ class AttrActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setClickEvents()
-        binding.performanceButton.setOnClickListener {
-            PerformanceActivity.start(it.context)
-        }
+
     }
 
     private fun setClickEvents() {
@@ -126,14 +132,41 @@ class AttrActivity : AppCompatActivity() {
 
 }
 
-private fun EditText.setDpChange(onDpChange: (Px) -> Unit) {
+private fun TextView.setDpChange(onDpChange: (Px) -> Unit) {
     occupyParent()
-    doOnTextChanged { text, _, _, _ ->
-        val shadowBlur = (text?.toString()?.toIntOrNull() ?: 0).toFloat()
-        onDpChange(Dp(shadowBlur).toPx())
+    setOnClickListener { view ->
+        NumberPickerDialog(view.context) {
+            onDpChange(Px(it))
+            this.text = it.toString()
+        }.show()
     }
 }
 
 private fun View.occupyParent() {
     (parent as? View)?.setOnClickListener { this.performClick() }
+}
+
+private class NumberPickerDialog(context: Context, private val onSelectedNumber: (Number) -> Unit) :
+    AppCompatDialog(context) {
+    private val numberPicker = NumberPicker(context)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(numberPicker)
+        numberPicker.minValue = 0
+        numberPicker.maxValue = 30
+        numberPicker.setOnValueChangedListener { picker, oldVal, newVal ->
+            onSelectedNumber(newVal)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setTitle(null)
+        window?.attributes = window?.attributes?.apply {
+            width = WindowManager.LayoutParams.MATCH_PARENT
+        }
+        window?.setGravity(Gravity.BOTTOM)
+        window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+    }
+
 }

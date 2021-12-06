@@ -9,12 +9,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.attrButton.setOnClickListener {
+        binding.bindView()
+    }
+
+    private fun Binding.bindView() {
+        attrButton.setOnClickListener {
             val shareView = binding.boxShadowLayout
-            AttrActivity.start(this, shareView, shareView.transitionName)
+            AttrActivity.start(this@MainActivity, shareView, shareView.transitionName)
         }
-        binding.animButton.setOnClickListener {
+        animButton.setOnClickListener {
             AnimationActivity.start(it.context)
         }
+        clipButton.setOnClickListener {
+            ClipActivity.start(it.context)
+        }
+        performanceButton.setOnClickListener {
+            PerformanceActivity.start(it.context)
+        }
     }
+
+
 }

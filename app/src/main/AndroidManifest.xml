@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ClipActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".PerformanceActivity"
             android:screenOrientation="portrait" />
         <activity
