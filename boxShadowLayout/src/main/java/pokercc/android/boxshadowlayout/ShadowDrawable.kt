@@ -42,5 +42,5 @@ internal abstract class ShadowDrawable(protected val shadowPath: Path) : Drawabl
     open fun invalidateCache() = Unit
 
     abstract fun onShadowChange(blur: Float, color: Int, inset: Boolean)
-
+    open fun release() = Unit
 }

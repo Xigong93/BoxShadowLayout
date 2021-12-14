@@ -71,5 +71,9 @@ internal abstract class BitmapShadowDrawable(shadowPath: Path) : ShadowDrawable(
 
     abstract fun onDrawBitmap(bitmap: Bitmap)
 
+    override fun release() {
+        bitmap?.recycle()
+        bitmap = null
+    }
 
 }

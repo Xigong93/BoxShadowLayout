@@ -68,7 +68,7 @@ class AnimationActivity : AppCompatActivity() {
             Dp(0f).toPx().toFloat(),
             Dp(20f).toPx().toFloat()
         )
-        anim?.cancel()
+        cancelAnim()
         val animatorSet = AnimatorSet()
         anim = animatorSet
         animatorSet.duration = 2000
@@ -89,12 +89,20 @@ class AnimationActivity : AppCompatActivity() {
         super.onStart()
         anim?.resume()
     }
+
     override fun onPause() {
         super.onPause()
         anim?.pause()
     }
+
     override fun onDestroy() {
         super.onDestroy()
+        cancelAnim()
+    }
+
+    private fun cancelAnim() {
+        anim?.removeAllListeners()
         anim?.cancel()
+        anim = null
     }
 }

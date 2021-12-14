@@ -104,6 +104,11 @@ class BoxShadowLayout @JvmOverloads constructor(
         tellParentNotChip()
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        shadowDrawable.release()
+    }
+
     override fun draw(canvas: Canvas) {
         drawShadow(canvas)
         val saveCount = canvas.saveLayer(null, null)
